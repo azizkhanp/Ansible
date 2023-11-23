@@ -1,0 +1,21 @@
+- hosts: all
+  become: true
+  tasks:
+  #This example task, zip the file helloworld.txt to helloworld.zip file
+
+  - name: Ansible zip file example
+
+    archive:
+      path: /home/ansible/helloworld.txt
+      dest: /home/ansible/helloworld.zip
+      format: zip
+
+  - name: Ansible zip multiple files example
+    #This example task, zip multiple files to helloworld.zip file.
+
+    archive:
+    path:
+    - /home/ansible/helloworld1.txt
+    - /home/ansible/helloworld.txt
+    dest: /home/ansible/helloworld.zip
+    format: zip

@@ -1,0 +1,35 @@
+- name: Change SSH port and restart service
+  hosts: webservers
+  become: yes # Run tasks with sudo or become the root user
+
+  vars:
+    new_ssh_port: 2222 # Set the desired new SSH port number
+
+  tasks:
+  - name: Change SSH port on Ubuntu
+    block:
+    - name: Update SSH port in sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?Port '
+        line: 'Port {{ new_ssh_port }}'
+      notify: Restart SSH Service
+
+    when: "ansible_os_family == 'Debian'"
+
+  - name: Change SSH port on CentOS
+    block:
+    - name: Update SSH port in sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?Port '
+        line: 'Port {{ new_ssh_port }}'
+      notify: Restart SSH Service
+
+    when: "ansible_os_family == 'RedHat'"
+
+  handlers:
+  - name: Restart SSH Service
+    service:
+      name: ssh
+      state: restarted

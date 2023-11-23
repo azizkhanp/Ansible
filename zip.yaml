@@ -1,0 +1,28 @@
+- name: Zip files larger than 2GB
+  hosts: localhost
+  gather_facts: true
+  become: yes # Run tasks with sudo or become the root user
+
+  vars:
+    source_directory: /path/to/source
+    destination_directory: /path/to/destination
+    zip_filename: archive.zip
+    max_file_size: 2G
+
+  tasks:
+  - name: Find files larger than 2GB
+    find:
+      paths: "{{ source_directory }}"
+      recurse: yes
+      size: "{{ max_file_size }}"
+    register: large_files
+
+  - name: Create a zip file if there are large files
+    command: "tar czf {{ destination_directory }}/{{ zip_filename }} -C {{ source_directory }} {{ item.path }}"
+    with_items: "{{ large_files.files }}"
+    when: large_files.matched > 0
+
+  - name: Display information about the zipped files
+    debug:
+      var: large_files
+    when: large_files.matched > 0
