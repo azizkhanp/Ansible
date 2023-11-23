@@ -1,0 +1,33 @@
+- name: Create and configure a new user
+  hosts: localhost
+  become: yes # Run tasks with sudo or become the root user
+
+  vars:
+    new_username: aziz
+    new_user_password: khan
+    user_home_directory: /home/{{ new_username }}
+
+  tasks:
+  - name: Create a new user
+    user:
+      name: "{{ new_username }}"
+      password: "{{ new_user_password | password_hash('sha512') }}"
+      createhome: yes
+      shell: /bin/bash
+
+  - name: Set initial password to expire
+    command: chage -d 0 "{{ new_username }}"
+  - name: Update the user's password on first login
+    #   become_user: "{{ new_username }}"
+
+    copy:
+      content: "password={{ new_user_password }}\n"
+      dest: "{{ user_home_directory }}/.first_login_password"
+      mode: '0600'
+      owner: "{{ new_username }}"
+    become_user: "{{ new_username }}"
+    when: not (new_user_password is undefined or new_user_password == '')
+
+  - name: Display user information
+    debug:
+      var: ansible_users
