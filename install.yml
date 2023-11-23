@@ -1,3 +1,4 @@
+---
 - name: Install Docker and Docker Compose on CentOS
   hosts: '{{ host }}'
   become: true
