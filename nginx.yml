@@ -1,3 +1,4 @@
+#modules apt,service,copy,file
 ---
 - hosts:
   become: true
