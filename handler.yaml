@@ -1,0 +1,23 @@
+---
+- name: Install and configure Nginx with Handler
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+      notify: restart_nginx
+
+    - name: Copy Nginx configuration
+      copy:
+        src: nginx.conf
+        dest: /etc/nginx/nginx.conf
+      notify: restart_nginx
+
+  handlers:
+    - name: restart_nginx
+      service:
+        name: nginx
+        state: restarted
