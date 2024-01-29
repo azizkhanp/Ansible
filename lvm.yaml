@@ -1,4 +1,5 @@
 #https://computingforgeeks.com/create-lvm-logical-volume-and-mount-using-ansible/
+# https://docs.ansible.com/ansible/latest/collections/community/general/lvol_module.html#examples
 #Create Logical Volume with existing Volume Group
 - name: playbook to create a LV
   hosts: ubuntu-servers
