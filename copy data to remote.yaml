@@ -1,0 +1,17 @@
+---
+- name: Copy text file to 100 servers
+  hosts: all
+  become: true
+
+  vars:
+    local_file_path: "/path/to/local/textfile.txt"
+    remote_dir: "/path/to/remote/directory"
+    remote_user: "your_remote_username"
+
+  tasks:
+    - name: Copy text file to remote server
+      copy:
+        src: "{{ local_file_path }}"
+        dest: "{{ remote_dir }}"
+        remote_src: yes
+      delegate_to: localhost

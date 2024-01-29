@@ -1,3 +1,4 @@
+---
 - name: Zip files larger than 2GB
   hosts: localhost
   gather_facts: true

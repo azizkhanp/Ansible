@@ -1,3 +1,4 @@
+---
 - name: Create and configure a new user
   hosts: localhost
   become: yes # Run tasks with sudo or become the root user
