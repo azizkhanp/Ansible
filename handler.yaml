@@ -1,7 +1,9 @@
 ---
 - name: Install and configure Nginx with Handler
   hosts: all
-  become: true
+  become: yes
+  become_user: ubuntu
+  become_method: sudo
 
   tasks:
     - name: Install Nginx
