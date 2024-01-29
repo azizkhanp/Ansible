@@ -1,0 +1,28 @@
+#https://computingforgeeks.com/create-lvm-logical-volume-and-mount-using-ansible/
+#Create Logical Volume with existing Volume Group
+- name: playbook to create a LV
+  hosts: ubuntu-servers
+  remote_user: ubuntu
+  become: yes
+  become_method: sudo
+  vars:
+    vg_name: vg00
+    lv_name: lv01
+    lv_size: 20G
+    fs_type: xfs
+    mount_point: /web-app
+  tasks:
+  - name: Create a LV
+    community.general.lvol:
+      vg: "{{ vg_name }}"
+      lv: "{{ lv_name }}"
+      size: "{{ lv_size }}"
+  - name: Create filesystem on lv
+    community.general.filesystem:
+      fstype: "{{ fs_type }}"
+      dev: /dev/mapper/{{ vg_name }}-{{ lv_name }}
+  - name: mount created filesystem
+    ansible.posix.mount:
+      path: "{{ mount_point }}"
+      state: mounted
+      fstype: "{{ fs_type }}"
